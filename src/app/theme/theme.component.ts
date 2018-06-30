@@ -32,11 +32,11 @@ export class ThemeComponent implements OnInit {
       case "terminalTheme": {
         return this.terminalTheme();
       }
-      case "defaultTheme": {
-        return this.defaultTheme();
-      }
       case "nightTheme": {
         return this.nightTheme();
+      }
+      case "defaultTheme": {
+        return this.defaultTheme();
       }
       default: {
         return;

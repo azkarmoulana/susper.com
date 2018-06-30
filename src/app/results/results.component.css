@@ -18,6 +18,11 @@
   overflow: hidden !important;
   text-overflow: ellipsis;
 }
+.infobox{
+  float:right;
+  margin-right: 15px;
+  margin-top: auto;
+}
 
 .link > p {
   color: #006621;
@@ -76,7 +81,6 @@ a {
   padding-left: 2%;
   padding-right: 2%;
   border: 0;
-  background-color: white;
   text-align: center;
   cursor: pointer;
 }
@@ -174,11 +178,6 @@ a {
   cursor: pointer;
 }
 
-.infobox {
-  display: inline-block;
-  float: left;
-}
-
 .item img {
   max-width: 100%;
   max-height: 100%;
@@ -190,7 +189,7 @@ a {
   background-color: #000;
   position: relative;
   width: 100%;
-  text-align: center
+  text-align: center;
 }
 /** END **/
 
@@ -249,7 +248,7 @@ a {
   text-decoration: none;
   color: #777;
   position: relative;
-  left: 5%;
+  left: -5%;
 }
 
 #tools:hover {
@@ -260,7 +259,7 @@ a {
   text-decoration: none;
   color: #777;
   position: relative;
-  left: 5%;
+  left: -5%;
 }
 
 #settings:hover {
@@ -318,7 +317,6 @@ a {
 }
 
 .page-item span {
-   background-color: white;
    border: 0 ;
    font-size: 13px;
 }
@@ -327,16 +325,12 @@ a {
   padding: 6px 0.4px ;
 }
 
- .active_page {
-       color: black;
-}
-
 .clean {
   clear: both;
 }
 
 #toggle-button{
-  margin-left: 2vw;
+  margin-left: 4vw;
   margin-top: 1vh;
   margin-bottom: 1vh;
   background-color: white;
@@ -377,6 +371,51 @@ div.autocorrect {
 
 
  /*Responsiveness*/
+@media screen and (max-width: 811px) and (min-width: 768px) {
+  #settings{
+    left: -15%;
+  }
+  #tools{
+    left: -15%;
+  }
+}
+@media screen and (max-width: 767px) and (min-width: 736px) {
+  #settings{
+    left: 5%;
+  }
+  #tools{
+    left: 5%;
+  }
+}
+@media screen and (max-width: 735px) and (min-width: 640px) {
+  #tools{
+    left: -5%;
+  }
+}
+
+@media screen and (max-width: 560px) and (min-width: 495px) {
+  #settings{
+    left: 27%;
+  }
+  #tools{
+    left: 27%;
+  }
+}
+
+@media screen and (max-width: 495px) {
+  #settings{
+    left: 10%;
+  }
+  #tools{
+    display:none;
+  }
+}
+@media screen and (max-width: 420px) {
+  #settings{
+    left: 5%;
+  }
+}
+
 @media screen and (min-width: 426px) and (max-width: 2560px) {
   .next-page-mobile {
     display: none;
@@ -404,7 +443,8 @@ div.autocorrect {
     margin-left: 174px;
   }
 }
-@media screen and (max-width:1100px){
+
+@media screen and (max-width:1131px){
   .infobox {
     display: none;
   }
@@ -470,14 +510,6 @@ div.autocorrect {
     padding-top: 8%;
   }
 
-  #settings {
-    left: 4.5%;
-  }
-
-  #tools {
-    left: 4.5%;
-  }
-
   #setting-dropdown {
     min-width: 100px;
     margin-left: 0;
@@ -527,19 +559,6 @@ div.autocorrect {
 @media screen and (max-width:560px) {
   li.dropdown {
     left:0;
-  }
-
-  #settings {
-    left:0;
-  }
-
-  #tools {
-    left:0;
-  }
-
-  #search-options li {
-    padding-left: 5vw;
-    padding-right: 5vw;
   }
 
   #setting-dropdown li {
@@ -625,7 +644,6 @@ div.autocorrect {
   }
 
   .page-item2 span {
-    background-color: #ffffff;
     margin-top: -13%;
   }
 

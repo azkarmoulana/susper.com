@@ -1,23 +1,21 @@
 import { Injectable } from '@angular/core';
-import {Http, Jsonp, Headers, RequestOptions, URLSearchParams} from "@angular/http";
-import {Store} from "@ngrx/store";
-import * as fromRoot from '../reducers';
+import { Jsonp, RequestOptions, URLSearchParams } from "@angular/http";
+
 import {Observable} from "rxjs";
+import 'rxjs/add/operator/retry';
 @Injectable()
 export class CrawlstartService {
-  server = 'yacy.searchlab.eu';
-  searchURL = 'https://' + this.server + '/solr/select?callback=?';
 
   constructor(
-    private http: Http,
-    private jsonp: Jsonp,
-    private store: Store<fromRoot.State>
+    private jsonp: Jsonp
   ) { }
 
   getcrawldefaults() {
     return this.jsonp.get('https://yacygrid.com:8300/yacy/grid/crawler/defaultValues.json?CALLBACK=JSONP_CALLBACK').map(res => {
       res.json();
-    });
+    }).retry(2)
+      .catch(this.handleError);
+
   }
 
   private handleError (error: any) {
@@ -43,6 +41,7 @@ export class CrawlstartService {
     return this.jsonp
       .get('https://yacy.searchlab.eu/Crawler_p.json', options).map(res => {
         res.json();
-      });
+      }).retry(2)
+      .catch(this.handleError);
   }
 }

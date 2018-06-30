@@ -1,13 +1,8 @@
-import { Component, OnInit, ChangeDetectorRef } from '@angular/core';
-import { Router, ActivatedRoute } from '@angular/router';
-import { Store } from '@ngrx/store';
+import { Component, OnInit } from '@angular/core';
+import {Store} from '@ngrx/store';
 import * as fromRoot from '../reducers';
-import { KnowledgeapiService } from '../services/knowledgeapi.service';
-import { Observable } from "rxjs";
-import { SpeechSynthesisService } from '../services/speech-synthesis.service';
-import {ThemeService} from '../services/theme.service';
-declare var window: any;
-declare var SpeechSynthesisUtterance: any;
+import { Observable } from 'rxjs/Observable';
+import { ThemeService } from '../services/theme.service';
 
 @Component({
   selector: 'app-infobox',
@@ -15,59 +10,34 @@ declare var SpeechSynthesisUtterance: any;
   styleUrls: ['./infobox.component.css']
 })
 export class InfoboxComponent implements OnInit {
-  results: Array<any>;
+  title: string = '';
+  description: string = '';
+  results: object;
   query$: any;
-  keyword: any;
+  image: string;
   resultsearch = '/search';
-  initialresults: Array<any>;
-  resultscomponentchange$: Observable<any>;
-  response$: Observable<any>;
   speechMode: any;
-
-  constructor(
-    private knowledgeservice: KnowledgeapiService,
-    private route: Router,
-    private activatedroute: ActivatedRoute,
-    private store: Store<fromRoot.State>,
-    private ref: ChangeDetectorRef,
-    private synthesis: SpeechSynthesisService,
-    private themeService: ThemeService
-    ) {
-    this.query$ = store.select(fromRoot.getwholequery);
-
-    this.query$.subscribe(query => {
-      this.keyword = query.query;
-      this.speechMode = query.mode;
-    });
-
-    this.response$ = store.select(fromRoot.getKnowledge);
-
-    this.response$.subscribe(res => {
-      if (res.results) {
-        if (res.results[0]) {
-          if (res.results[0].label.toLowerCase().includes(this.keyword.toLowerCase())) {
-            this.results = res.results;
-
-            if (this.speechMode === 'speech') {
-              this.startSpeaking(this.results[0].description);
-            }
-          } else {
-              this.results = [];
-          }
-        }
-      } else {
-          this.results = [];
+  content_response$: Observable<any>;
+  image_response$: Observable<any>;
+  constructor(private store: Store<fromRoot.State>,
+              public themeService: ThemeService) {
+    this.query$ = store.select(fromRoot.getquery);
+    this.content_response$ = store.select(fromRoot.getKnowledgeContent);
+    this.content_response$.subscribe(res => {
+    this.results = res;
+      if (res.extract) {
+        this.title = res.title;
+        this.description = res.extract;
       }
     });
-
-  }
-
-  startSpeaking(description) {
-    let msg = new SpeechSynthesisUtterance(description);
-
-    window.speechSynthesis.cancel();
-    window.speechSynthesis.resume();
-    window.speechSynthesis.speak(msg);
+    this.image_response$ = store.select(fromRoot.getKnowledgeImage);
+    this.image_response$.subscribe(res => {
+      if (typeof res.RelatedTopics !== 'undefined') {
+        this.image = res.RelatedTopics[0].Icon.URL;
+      } else {
+        this.image = '';
+      }
+    });
   }
 
   ngOnInit() {

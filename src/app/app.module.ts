@@ -24,9 +24,6 @@ import { PrivacyComponent } from './privacy/privacy.component';
 import { EffectsModule } from '@ngrx/effects';
 import { ApiSearchEffects } from './effects/search-effects';
 import { NewadvancedsearchComponent } from './newadvancedsearch/newadvancedsearch.component';
-import { InfoboxComponent } from './infobox/infobox.component';
-import { KnowledgeapiService } from './services/knowledgeapi.service';
-import { RelatedSearchComponent } from './related-search/related-search.component';
 import { AutocompleteService } from "./services/autocomplete.service";
 import { AutoCompleteComponent } from './auto-complete/auto-complete.component';
 import { ThemeComponent } from './theme/theme.component';
@@ -34,19 +31,22 @@ import { ThemeService } from './services/theme.service';
 import { CrawlstartComponent } from './crawlstart/crawlstart.component';
 import { CrawlstartService } from "./services/crawlstart.service";
 import { SearchsettingsComponent } from './searchsettings/searchsettings.component';
-import { KnowledgeEffects } from "./effects/knowledge";
 import { SpeechService } from './services/speech.service';
 import { DropdownComponent } from './dropdown/dropdown.component';
 import { IntelligenceComponent } from './intelligence/intelligence.component';
-import {IntelligenceService} from "./services/intelligence.service";
+import { IntelligenceService } from "./services/intelligence.service";
 import { SpeechtotextComponent } from './speechtotext/speechtotext.component';
 import { AutoCorrectComponent } from './auto-correct/auto-correct.component';
 import { StatsboxComponent } from './statsbox/statsbox.component';
-import {AutocorrectService} from "./services/autocorrect.service";
+import { AutocorrectService } from "./services/autocorrect.service";
 import { SpeechSynthesisService } from './services/speech-synthesis.service';
-import {InfiniteScrollModule} from "ngx-infinite-scroll";
+import { InfiniteScrollModule } from "ngx-infinite-scroll";
 import { ChartsModule } from 'ng2-charts/ng2-charts';
-
+import { InfoboxComponent } from './infobox/infobox.component';
+import { KnowledgeapiService } from './services/knowledgeapi.service';
+import { KnowledgeEffects } from "./effects/knowledge";
+import { NewsService } from './services/news.service';
+import { GetJsonService } from './services/get-json.service';
 const appRoutes: Routes = [
   {path: 'search', component: ResultsComponent},
   {path: '', component: IndexComponent},
@@ -76,8 +76,6 @@ const appRoutes: Routes = [
     TermsComponent,
     PrivacyComponent,
     NewadvancedsearchComponent,
-    InfoboxComponent,
-    RelatedSearchComponent,
     AutoCompleteComponent,
     ThemeComponent,
     CrawlstartComponent,
@@ -87,6 +85,7 @@ const appRoutes: Routes = [
     SpeechtotextComponent,
     AutoCorrectComponent,
     StatsboxComponent,
+    InfoboxComponent,
   ],
 
   imports: [
@@ -107,14 +106,16 @@ const appRoutes: Routes = [
 
   providers: [
     SearchService,
-    KnowledgeapiService,
     AutocompleteService,
     ThemeService,
     SpeechService,
     CrawlstartService,
     IntelligenceService,
     AutocorrectService,
-    SpeechSynthesisService
+    SpeechSynthesisService,
+    KnowledgeapiService,
+    NewsService,
+    GetJsonService
   ],
 
   bootstrap: [AppComponent]

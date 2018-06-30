@@ -4,9 +4,12 @@
   <div class="row" [style.background-color]="themeService.backgroundColor">
     <div class="container-fluid" id="search-options-field" [style.background-color]="themeService.navbarbgColor">
       <ul type="none" id="search-options">
-        <li [class.active_view]="Display('all')" (click)="docClick()">All</li>
-        <li [class.active_view]="Display('images')" (click)="imageClick()">Images</li>
+        <a href='/search?query={{this.searchdata.query}}&start={{this.searchdata.start}}&rows={{this.searchdata.rows}}&mode=text' *ngIf="!Display('all')"><li [class.active_view]="Display('all')" (click)="docClick()">All</li></a>
+        <li [class.active_view]="Display('all')" (click)="docClick()" *ngIf="Display('all')">All</li>
+        <a href='/search?query={{this.searchdata.query}}&start={{this.searchdata.start}}&rows={{this.searchdata.rows}}&fq=url_file_ext_s%3A(png%2BOR%2Bjpeg%2BOR%2Bjpg%2BOR%2Bgif)&mode=text' *ngIf="!Display('images')"><li [class.active_view]="Display('images')" (click)="imageClick()">Images</li></a>
+        <li [class.active_view]="Display('images')" (click)="imageClick()" *ngIf="Display('images')">Images</li>
         <li [class.active_view]="Display('videos')" (click)="videoClick()">Videos</li>
+        <li [class.active_view]="Display('news')" (click)="newsClick()">News</li>
         <li class="dropdown">
           <a href="#" id="settings" class="dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
             Settings
@@ -32,7 +35,7 @@
     <div [hidden]="hidefooter">
       <!-- Basic results 'All' -->
       <div class="container-fluid">
-        <div class="result message-bar" *ngIf="totalNumber > 0 && !Display('images')">
+        <div class="result message-bar" *ngIf="totalNumber > 0 && !Display('images') && !Display('news')">
           {{message}}
         </div>
         <div class="autocorrect">
@@ -42,7 +45,7 @@
 
       <div class="text-result" *ngIf="Display('all')">
         <div *ngIf="totalNumber < 1" class="container-fluid">
-          <div class="noResults">
+          <div [style.color]="themeService.descriptionColor" class="noResults">
             <p>Your search -
               <em>{{searchdata.query}}</em> - did not match any documents.</p>
             <p>Suggestions:</p>
@@ -55,7 +58,7 @@
         </div>
         <div class="container-fluid">
           <div class="combo-box">
-            <app-infobox></app-infobox>
+              <app-infobox></app-infobox>
             <button class="btn" id="toggle-button" (click)="BoxToggle()" type="button" data-toggle="collapse" data-target="#statbox"
               aria-expanded="false" aria-controls="collapseExample" *ngIf="totalNumber > 0">
               {{boxMessage}} Analytics
@@ -77,7 +80,6 @@
                 </div>
               </div>
             </div>
-            <app-related-search [hidden]="hidefooter"></app-related-search>
           </div>
           <div class="infobox">
             <app-infobox [hidden]="hidefooter || hideAutoCorrect || totalNumber < 1" *ngIf="Display('all')"></app-infobox>
@@ -91,7 +93,7 @@
       <!-- Image section -->
       <div *ngIf="Display('images')">
         <div *ngIf="totalNumber < 1" class="container-fluid">
-          <div class="noResults">
+          <div [style.color]="themeService.descriptionColor" class="noResults">
             <p>Your search -
               <em>{{searchdata.query}}</em> - did not match any images.</p>
             <p>Suggestions:</p>
@@ -125,7 +127,7 @@
       <!--Video Section -->
       <div class="video-result" *ngIf="Display('videos')">
         <div *ngIf="totalNumber < 1" class="container-fluid">
-          <div class="noResults">
+          <div [style.color]="themeService.descriptionColor" class="noResults">
             <p>Your search -
               <em>{{searchdata.query}}</em> - did not match any videos.</p>
             <p>Suggestions:</p>
@@ -151,6 +153,35 @@
         </div>
       </div>
       <!--End-->
+       <!-- News section -->
+  <div class="news-result" *ngIf="Display('news')">
+    <div *ngIf="totalNumber < 1" class="container-fluid">
+      <div class="noResults">
+        <p>Your search -
+          <em>{{searchdata.query}}</em> - did not match any news.</p>
+        <p>Suggestions:</p>
+        <ul>
+          <li>Make sure that all words are spelled correctly.</li>
+          <li>Try different keywords.</li>
+          <li>Try more general keywords.</li>
+        </ul>
+      </div>
+    </div>
+    <div class="feed container">
+      <div *ngFor="let item of newsResponse" class="result">
+        <div class="title">
+          <a class="title-pointer" href="{{item.link}}" [style.color]="themeService.titleColor">{{item.title}}</a>
+        </div>
+        <div class="link">
+          <p  [style.color]="themeService.linkColor">{{item.link}}</p>
+        </div>
+        <div class="description">
+          <p [style.color]="themeService.descriptionColor">{{item.pubDate|date:'MMMM d, yyyy'}} - {{item.description}}</p>
+    </div>
+      </div>
+    </div>
+  </div>
+  <!-- END -->
       <br>
       <div class="clean"></div>
       <div class="card" *ngIf="totalNumber > 0">
@@ -161,39 +192,40 @@
               <div class="col-md-10 col-md-offset-1 col-sm-10 col-sm-offset-1 col-lg-10 col-lg-offset-1">
                 <ul class="pagination" id="pag-bar">
                   <li class="page-item2" *ngIf="!getStyle(1)">
-                    <span class="spl" id="left-arrow" (click)="decPresentPage()">
+                    <span [style.background-color]='themeService.backgroundColor' class="spl" id="left-arrow" (click)="decPresentPage()">
                       <div class="arrow" (click)="decreasePage()">
+                          &lt;
                         </div>
                           <div class="side-text">Previous</div>
                     </span>
                   </li>
                   <li class="page-item">
-                    <span class="page-link" href="#" (click)="decPresentPage()">
+                    <span [style.background-color]='themeService.backgroundColor' class="page-link" href="#" (click)="decPresentPage()">
                       <div class="page-text prev">S</div>
                       <br/>
                     </span>
                   </li>
                   <li class="page-item" *ngFor="let num of getNumber(maxPage)">
-                    <span class="page-link" *ngIf="presentPage>=4 && presentPage-3+num<=noOfPages" [class.active_page]="getStyle(presentPage-3+num)"
+                    <span [style.background-color]='themeService.backgroundColor' class="page-link" *ngIf="presentPage>=4 && presentPage-3+num<=noOfPages" [class.active_page]="getStyle(presentPage-3+num)"
                       (click)="getPresentPage(presentPage-3+num)" href="#">
                       <div [class.active_page]="getStyle(presentPage-3+num)" class="page-text">U</div>
                       <span class="page-number">{{presentPage-3+num}}</span>
                     </span>
-                    <span class="page-link" *ngIf="presentPage<4 && num<=noOfPages" [class.active_page]="num+1 == presentPage" (click)="getPresentPage(num+1)"
+                    <span [style.background-color]='themeService.backgroundColor' class="page-link" *ngIf="presentPage<4 && num<=noOfPages" [class.active_page]="num+1 == presentPage" (click)="getPresentPage(num+1)"
                       href="#">
                       <div [class.active_page]="num+1 == presentPage" class="page-text">U</div>
                       <span class="page-number">{{num+1}}</span>
                     </span>
                   </li>
                   <li class="page-item">
-                    <span class="page-link" (click)="incPresentPage()">
+                    <span [style.background-color]='themeService.backgroundColor' class="page-link" (click)="incPresentPage()">
                       <div class="page-text next">SPER</div>
                     </span>
                   </li>
                   <div class="next-page-mobile">Page {{count}}</div>
                   <li class="page-item2" *ngIf="!getStyle(noOfPages)">
-                    <span class="spl" (click)="incPresentPage()">
-                      <div class="arrow" (click)="increasePage()">></div>
+                    <span [style.background-color]='themeService.backgroundColor' class="spl" (click)="incPresentPage()">
+                      <div class="arrow" (click)="increasePage()">&gt;</div>
                       <div class="side-text">Next</div>
                     </span>
                   </li>

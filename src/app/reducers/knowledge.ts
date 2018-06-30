@@ -4,27 +4,32 @@ import { ActionReducer, Action } from '@ngrx/store';
 import { createSelector } from 'reselect';
 import * as knowledge from '../actions/knowledge';
 
-export const CHANGE = 'CHANGE';
+export const CONTENT_CHANGE = 'CONTENT_CHANGE';
+export const IMAGE_CHANGE = 'IMAGE_CHANGE';
 
 export interface State {
-  response: any;
+  content_response: any,
+  image_response: any
 }
-/**
- * There is always a need of initial state to be passed onto the store.
- *
- * @prop: query: ''
- * @prop: loading: false
- */
-const initialState: State = {
-  response: {}
-};
 
+const initialState: State = {
+  content_response: {},
+  image_response: {}
+};
 export function reducer(state: State = initialState, action: knowledge.Actions): State {
   switch (action.type) {
-    case knowledge.ActionTypes.CHANGE: {
-      const response = action.payload;
+    case knowledge.ActionTypes.CONTENT_CHANGE: {
+      const content_response = action.payload;
       return Object.assign({}, state, {
-        response: response,
+        content_response: content_response,
+        image_response: state.image_response
+      });
+    }
+    case knowledge.ActionTypes.IMAGE_CHANGE: {
+      const image_response = action.payload;
+      return Object.assign({}, state, {
+        content_response: state.content_response,
+        image_response: image_response
       });
     }
     default: {
@@ -32,5 +37,5 @@ export function reducer(state: State = initialState, action: knowledge.Actions):
     }
   }
 }
-
-export const getresponse = (state: State) => state.response;
+export const getContentResponse = (state: State) => state.content_response;
+export const getImageResponse = (state: State) => state.image_response;

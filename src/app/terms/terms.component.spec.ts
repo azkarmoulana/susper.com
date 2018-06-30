@@ -1,7 +1,5 @@
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
-import { Component, Input, Output } from '@angular/core';
 import { RouterTestingModule } from '@angular/router/testing';
-
 /**
  * import 'FormsModule' to avoid
  * "Can't bind to 'ngModel' since it isn't a known property of 'input'" error
@@ -9,6 +7,7 @@ import { RouterTestingModule } from '@angular/router/testing';
 import { FormsModule } from '@angular/forms';
 import { FooterNavbarComponent } from '../footer-navbar/footer-navbar.component';
 import { TermsComponent } from './terms.component';
+import {InfoboxComponent} from "../infobox/infobox.component";
 
 describe('Component: Terms', () => {
   let component: TermsComponent;
@@ -22,7 +21,8 @@ describe('Component: Terms', () => {
       ],
       declarations: [
         FooterNavbarComponent,
-        TermsComponent
+        TermsComponent,
+        InfoboxComponent
       ]
     })
     .compileComponents();

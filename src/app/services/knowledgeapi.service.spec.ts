@@ -1,8 +1,7 @@
 /* tslint:disable:no-unused-variable */
-
-import { TestBed, inject, async, fakeAsync, tick } from '@angular/core/testing';
+import { TestBed, inject } from '@angular/core/testing';
 import { MockBackend, MockConnection } from '@angular/http/testing';
-import { Http, Jsonp, BaseRequestOptions, RequestMethod, Response, ResponseOptions, HttpModule, JsonpModule } from '@angular/http';
+import { Http, BaseRequestOptions, RequestMethod, Response, ResponseOptions, HttpModule, JsonpModule } from '@angular/http';
 import { StoreModule } from '@ngrx/store';
 import { reducer } from '../reducers/index';
 
@@ -43,7 +42,7 @@ describe('Service: KnowledgeapiService', () => {
     backend = mockBackend;
   }));
 
-  const searchquery = 'Berlin';
+  const searchquery = 'india';
   const _queryResult = MockKnowledgeApi;
 
   it('should create an instance KnowledgeapiService',
@@ -61,12 +60,12 @@ describe('Service: KnowledgeapiService', () => {
       connection.mockRespond(new Response(options));
       expect(connection.request.method).toEqual(RequestMethod.Get);
       expect(connection.request.url).toBe(
-        `http://lookup.dbpedia.org/api/search/KeywordSearch` +
-                    `?&QueryString=${searchquery}`
+        `https://en.wikipedia.org/w/api.php?&origin=*&format=json&action=query&prop=extracts&exintro=&explaintext=&` +
+                    `titles=${searchquery}`
       );
     });
 
-    service.getsearchresults(searchquery).subscribe((res) => {
+    service.getSearchResults(searchquery).subscribe((res) => {
       expect(res).toEqual(MockKnowledgeApi);
     });
 

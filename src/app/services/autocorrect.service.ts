@@ -1,21 +1,16 @@
 import { Injectable } from '@angular/core';
-import {Observable} from 'rxjs';
-import {Http, URLSearchParams, Jsonp, Response, Headers, RequestOptions} from '@angular/http';
-import {Store} from "@ngrx/store";
-import * as fromRoot from '../reducers';
+import { Observable } from 'rxjs';
+import { Http, URLSearchParams, Headers, RequestOptions } from '@angular/http';
+import 'rxjs/add/operator/retry';
 
 
 @Injectable()
 export class AutocorrectService {
   server = 'https://montanaflynn-spellcheck.p.mashape.com';
   searchURL = this.server + '/check/';
-  homepage = 'https://susper.com';
-  logo = '../images/susper.svg';
 
   constructor(
-    private http: Http,
-    private jsonp: Jsonp,
-    private store: Store<fromRoot.State>
+    private http: Http
   ) { }
 
   getsearchresults(searchquery) {
@@ -31,10 +26,9 @@ export class AutocorrectService {
     let options = new RequestOptions({ headers: headers, search: params });
     return this.http
       .get(this.searchURL, options).map(res =>
-
         res.json()
-
-      ).catch(this.handleError);
+      ).retry(2)
+      .catch(this.handleError);
   }
 
   private handleError (error: any) {

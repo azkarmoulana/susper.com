@@ -1,6 +1,7 @@
 import { createSelector } from 'reselect';
 import { ActionReducer } from '@ngrx/store';
 import { environment } from '../../environments/environment';
+import * as fromKnowledge from './knowledge';
 
 /**
  * The compose function is one of our most handy tools. In basic terms, you give
@@ -38,7 +39,6 @@ import { combineReducers } from '@ngrx/store';
  */
 import * as fromSearch from './search';
 import * as fromQuery from './query';
-import * as fromKnowledge from './knowledge';
 import * as fromSpeech from './speech';
 /**
  * As mentioned, we treat each reducer like a table in a database. This means
@@ -47,8 +47,8 @@ import * as fromSpeech from './speech';
 export interface State {
   search: fromSearch.State;
   query: fromQuery.State;
-  knowledge: fromKnowledge.State;
   speech: fromSpeech.State;
+  knowledge: fromKnowledge.State;
 }
 
 
@@ -62,8 +62,8 @@ export interface State {
 const reducers = {
   search: fromSearch.reducer,
   query: fromQuery.reducer,
-  knowledge: fromKnowledge.reducer,
   speech: fromSpeech.reducer,
+  knowledge: fromKnowledge.reducer
 };
 
 const developmentReducer: ActionReducer<State> = compose(storeFreeze, combineReducers)(reducers);
@@ -79,14 +79,15 @@ export function reducer(state: any, action: any) {
 
 export const getSearchState = (state: State) => state.search;
 export const getQueryState = (state: State) => state.query;
-export const getSpeechState = (state: State) => state.speech;
 export const getKnowledgeState = (state: State) => state.knowledge;
+export const getSpeechState = (state: State) => state.speech;
 export const getSearchResults = createSelector(getSearchState, fromSearch.getsearchresults);
 export const getItems = createSelector(getSearchState, fromSearch.getItems);
 export const getTotalResults = createSelector(getSearchState, fromSearch.getTotalResults);
 export const getNavigation = createSelector(getSearchState, fromSearch.getNavigation);
 export const getquery = createSelector(getQueryState, fromQuery.getpresentquery);
+export const getKnowledgeContent = createSelector(getKnowledgeState, fromKnowledge.getContentResponse);
+export const getKnowledgeImage = createSelector(getKnowledgeState, fromKnowledge.getImageResponse);
 export const getwholequery = createSelector(getQueryState, fromQuery.getpresentwholequery);
-export const getKnowledge = createSelector(getKnowledgeState, fromKnowledge.getresponse);
 export const getResponseTime = createSelector(getSearchState, fromSearch.getresponsetime);
 export const getSpeechMode = createSelector(getSpeechState, fromSpeech.getspeechmode);
