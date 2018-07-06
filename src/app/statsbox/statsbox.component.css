@@ -9,6 +9,11 @@
   margin-top: 10px;
 }
 
+.badge{
+  font-weight: 500;
+  border-radius: 3px;
+}
+
 .badge-info {
   background-color: #468847;
   padding: 0.25em;
@@ -58,15 +63,9 @@ a {
   }
 }
 
-@media screen and (max-width: 1307px) {
+@media screen and (max-width: 1205px) {
   .card {
-    width: 366px;
-  }
-}
-
-@media screen and (max-width: 1219px) {
-  .card {
-    width: 278px;
+    width: 320px;
   }
 }
 
